@@ -1,5 +1,5 @@
-# Sử dụng Tomcat 10 (Jakarta EE) chạy trên Java 17
-FROM tomcat:10.1-jdk17-openjdk-slim
+# Sử dụng Tomcat 10 (Jakarta EE) chạy trên Java 21
+FROM tomcat:10.1-jdk21-openjdk-slim
 
 # Xóa các ứng dụng mặc định của Tomcat để nhẹ máy
 RUN rm -rf /usr/local/tomcat/webapps/*
