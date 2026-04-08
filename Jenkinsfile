@@ -1,16 +1,21 @@
 pipeline {
     agent any
 
+    tools {
+        // 'maven' là tên bạn đã đặt trong Manage Jenkins > Tools
+        maven 'maven'
+    }
+
     environment {
-        // THAY ĐỔI: Tên repo Docker Hub của bạn (ví dụ: kachingo/ttweb-deploy)
-        DOCKER_IMAGE = "kachingo/ttweb-deploy:latest"
+        // Hãy thay "kachingo/ttweb-deploy" bằng [Tên Docker Hub của bạn]/[Tên Repo]
+        DOCKER_IMAGE = "kachingo/web_test:latest"
         DOCKER_CREDENTIALS_ID = 'docker-hub-creds'
     }
 
     stages {
         stage('Maven Build') {
             steps {
-                // Đóng gói code thành file .war
+                // Lệnh 'bat' dành cho Windows
                 bat 'mvn clean package'
             }
         }
@@ -18,10 +23,7 @@ pipeline {
         stage('Docker Build & Push') {
             steps {
                 script {
-                    // Build image từ Dockerfile
                     docker.build(env.DOCKER_IMAGE)
-
-                    // Push lên Docker Hub để Render có thể lấy về
                     docker.withRegistry('', env.DOCKER_CREDENTIALS_ID) {
                         docker.image(env.DOCKER_IMAGE).push()
                     }
